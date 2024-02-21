@@ -1,15 +1,16 @@
 const { response } = require('express')
 const User = require('../models/User')
-
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const login = (req, res, next) => {
     var username = req.body.username
     var password = req.body.password
 
-    Userser.findOne({$or: [{email:username},{userId:username}]})
+    User.findOne({$or: [{email:username},{userId:username}]})
     .then(user => {
         if(user){
-            bcrypt.compare(password, user.password, function(err, resut) {
+            bcrypt.compare(password, user.password, function(err, result) {
                 if(err){
                     res.json({
                         error : err
@@ -18,7 +19,7 @@ const login = (req, res, next) => {
                 if(result){
                     let token = jwt.sign({name: user.name},  'AaBdr(23)', {expiresIn: '1h'})
                     res.json({
-                        message: 'Login Successful!',
+                        message: 'Success',
                         token
                     })
                 }else{
@@ -126,10 +127,10 @@ const update = (req, res, next) => {
 }
 
 //delete an employee
-const destroy = (req, res, next) => {
-    let userId = req.body.userId
+const destroy = (req, res) => {
+    let userid = req.body.userid
 
-    User.findByIdAndDelete(userId)
+    User.findByIdAndDelete(userid)
     .then(() => {
         res.json({
             message: 'User  deleted successfully!'
@@ -138,7 +139,7 @@ const destroy = (req, res, next) => {
     .catch(error => {
         res.json({
             message: 'An error Occured!'
-        })
+        }+error)
     })
 }
 

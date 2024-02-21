@@ -1,31 +1,31 @@
-const path = require('path')
-const multer =require('multer')
+const path = require('path');
+const multer = require('multer');
 
-var storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, 'uploads/')
-    },
-    filename: function(req, file, cb){
-        let ext = path.extname(file.originalname)
-        cb(null, Date.now() + ext)
+// Define storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Save file with its original name
+  }
+});
+
+// Configure file upload restrictions and validation
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, callback) => {
+    const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Only PDF, JPEG, and PNG files are supported.'));
     }
-})
+  },
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB file size limit
+  }
+});
 
-var upload = multer ({
-    storage: storage,
-    fileFilter: function(req, file, callback) {
-        if(
-            file.mimetype == "application/pdf" 
-        ){
-            callback(null,true)
-        }else{
-            console.log('only pdf, jpg & png file supported!')
-            callback(null,false)
-        }
-    },
-    limits: {
-        fileSize: 1024 * 1024 * 3
-    }
-})
 
-module.exports = upload
+module.exports = upload;

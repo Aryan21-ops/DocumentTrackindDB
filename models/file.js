@@ -20,7 +20,7 @@ const fileSchema = new Schema({
     description:{
         type : String
     },
-    avatar:{
+    filename:{
         type:String
     }
 

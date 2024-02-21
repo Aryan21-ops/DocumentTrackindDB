@@ -5,9 +5,9 @@ const fileController = require('../Controllers/filecontroller')
 const upload = require('../middleware/upload')
 const authenticate = require('../middleware/authenticate')
 
-router.get('/', authenticate, fileController.indexfile)
-router.post('/show', fileController.showfile)
-router.post('/addfile', upload.single('avatar'), fileController.addfile)
+router.get('/',  fileController.indexfile)
+router.post('/show/:filename', fileController.showfile)
+router.post('/addfile', upload.array('files'), fileController.addfile)
 router.post('/update', fileController.updatefile)
 router.post('/delete', fileController.destroyfile)
 

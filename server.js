@@ -1,14 +1,16 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-
+require('dotenv').config();
 
 const UserRoute = require('./routes/Userroutes')
 const FileRoute = require('./routes/Userfileroutes')
 const AdminRoute = require('./routes/auth')
 
-mongoose.connect('mongodb://127.0.0.1:27017/DocumentTracking')
+const uri = process.env.ATLAS_URI;
+mongoose.connect(uri, {useNewUrlParser: true});
 const db = mongoose.connection
 
 db.on('error', (err) => {
@@ -22,11 +24,12 @@ db.once('open', () => {
 const app = express()
 
 app.use(morgan('dev'))
+app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-app.use('uploads', express.static('uploads'))
+app.use('/uploads', express.static('uploads'))
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

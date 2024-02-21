@@ -18,7 +18,7 @@ const indexfile = (req, res, next) => {
 
 //show single user by id
 const showfile = (req, res, next) => {
-    let Doc_code = req.body.Doc_code
+    let fileId = req.body.filename
     File.findById(fileId)
     .then(response => {
         res.json({
@@ -40,7 +40,8 @@ const addfile = (req, res, next) =>{
         recipient: req.body.recipient,
         category: req.body.category,
         priortization: req.body.priortization,
-        description: req.body.description
+        description: req.body.description,
+        filename : req.files ? req.files[0].originalname : '',
     })
     if(req.file){
         file.avatar = req.file.path

@@ -10,7 +10,7 @@ const authenticate = require('../middleware/authenticate')
 router.post('/register',  Authcontroller.register)
 router.post('/adminlogin',  Authcontroller.login)
 
-router.post('/userlogin', authenticate, UserAuthcontroller.login)
+router.post('/userlogin',  UserAuthcontroller.login)
 
 
 module.exports = router
